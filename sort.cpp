@@ -7,8 +7,8 @@
 
 #include "commons.h"
 
-static const std::string kMapFileDirectoty = "map_files";
-static const std::string kMapOutputPattern = kMapFileDirectoty + "/map_output_";
+static const std::string kMapFileDirectory = "map_files";
+static const std::string kMapOutputPattern = kMapFileDirectory + "/map_output_";
 
 using std::cout;
 using std::ifstream;
@@ -32,7 +32,7 @@ using MinHeap = std::priority_queue<State>;
 using VectorPtr = vector<std::shared_ptr<ifstream>>;
 
 VectorPtr GetInputStreams() {
-    const auto files = GetDirFilesStartsWith(kMapOutputPattern, kMapFileDirectoty);
+    const auto files = GetDirFilesStartsWith(kMapOutputPattern, kMapFileDirectory);
     VectorPtr result;
     result.reserve(files.size());
     for (const auto& file : files) {
