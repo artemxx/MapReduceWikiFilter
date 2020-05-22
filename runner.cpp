@@ -1,11 +1,15 @@
-#include "runner.h"
-
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
-#include "commons.h"
 
-namespace bp = boost::process;
+#include "commons.h"
+#include "runner.h"
+
 namespace bf = boost::filesystem;
+namespace bp = boost::process;
+
+using std::pair;
+using std::string;
+using std::vector;
 
 string GetNumber(uint64_t number) {
     auto res = std::to_string(number);
@@ -20,13 +24,17 @@ string GetFileName(const string& operation, const string& type, uint64_t file_nu
     return operation + "_" + type + "_" + GetNumber(file_num) + ".txt";
 }
 
-void PrintBatchToFile(vector<string>& urls, uint64_t file_num) {
+void PrintBatchToFile(vector <string>& urls, uint64_t file_num) {
     const auto file_name = GetFileName("map", "input", file_num);
     bf::create_directory(kMapFilesDir);
-    ofstream out(kMapFilesDir + "/" + file_name);
+    std::ofstream out(kMapFilesDir + "/" + file_name);
     for (const auto& url : urls) {
         out << url << "\t\n";
     }
+}
+
+TMapReduceRunner::TMapReduceRunner(TMapReduceOptions options)
+    : options_(std::move(options)) {
 }
 
 void TMapReduceRunner::RemoveTempFiles() {
@@ -57,7 +65,7 @@ void TMapReduceRunner::SplitDataOnFiles() const {
 void TMapReduceRunner::RunMap() const {
     const auto inputs = GetDirFilesStartsWith(kMapInputPattern, kMapFilesDir);
 
-    vector<bp::child> processes;
+    vector <bp::child> processes;
     processes.reserve(inputs.size());
     uint64_t file_num = 0;
     for (const auto& input : inputs) {
@@ -99,7 +107,7 @@ void TMapReduceRunner::MergeOutputs() const {
 
 void TMapReduceRunner::RunReduceJobs() const {
     const auto inputs = GetDirFilesStartsWith(kReduceInputPattern, kReduceFilesDir);
-    vector<bp::child> processes;
+    vector <bp::child> processes;
     processes.reserve(inputs.size());
     uint64_t file_num = 0;
     for (const auto& input : inputs) {
@@ -114,9 +122,9 @@ void TMapReduceRunner::RunReduceJobs() const {
 }
 
 void TMapReduceRunner::SplitIntoJobs() {
-    ifstream in(kReduceFilesDir + "/" + kSortedFileName);
+    std::ifstream in(kReduceFilesDir + "/" + kSortedFileName);
     string text;
-    vector<pair<string, string>> cur;
+    vector <pair<string, string>> cur;
     uint64_t file_num = 0;
     while (getline(in, text)) {
         const auto word = text.substr(0, text.find('\t'));
@@ -132,7 +140,7 @@ void TMapReduceRunner::SplitIntoJobs() {
     GenerateReduceInput(cur, file_num);
 }
 
-void TMapReduceRunner::GenerateReduceInput(const vector<pair<string, string>>& data, uint64_t file_num) {
+void TMapReduceRunner::GenerateReduceInput(const vector <pair<string, string>>& data, uint64_t file_num) {
     const auto file_name = kReduceFilesDir + "/" + GetFileName("reduce", "input", file_num);
     std::ofstream out(file_name);
     for (const auto& it : data) {

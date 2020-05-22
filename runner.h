@@ -1,16 +1,16 @@
 #pragma once
 
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <string>
+#include <vector>
+#include <utility>
 
 static constexpr auto kChunkSize = 3;
-static const string kMapFilesDir = "map_files";
-static const string kReduceFilesDir = "reduce_files";
-static const string kMapInputPattern = kMapFilesDir + "/map_input_";
-static const string kReduceInputPattern = kReduceFilesDir + "/reduce_input_";
-static const string kReduceOutputPattern = kReduceFilesDir + "/reduce_output_";
-static const string kSortedFileName = "sorted.txt";
+static const std::string kMapFilesDir = "map_files";
+static const std::string kReduceFilesDir = "reduce_files";
+static const std::string kMapInputPattern = kMapFilesDir + "/map_input_";
+static const std::string kReduceInputPattern = kReduceFilesDir + "/reduce_input_";
+static const std::string kReduceOutputPattern = kReduceFilesDir + "/reduce_output_";
+static const std::string kSortedFileName = "sorted.txt";
 
 struct TMapReduceOptions {
     std::string type;
@@ -22,9 +22,7 @@ struct TMapReduceOptions {
 
 class TMapReduceRunner {
 public:
-    explicit TMapReduceRunner(TMapReduceOptions options)
-        : options_(std::move(options)) {
-    }
+    explicit TMapReduceRunner(TMapReduceOptions options);
 
     static void RemoveTempFiles();
 
@@ -45,5 +43,6 @@ private:
 
     static void SplitIntoJobs();
 
-    static void GenerateReduceInput(const vector<pair<string, string>>& data, uint64_t file_num);
+    static void GenerateReduceInput(
+        const std::vector<std::pair<std::string, std::string>>& data, uint64_t file_num);
 };

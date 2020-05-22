@@ -1,11 +1,15 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 
 #include <boost/program_options.hpp>
+
 #include "runner.h"
 
 namespace po = boost::program_options;
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 void Fail(const string& message) {
     cout << message << endl;

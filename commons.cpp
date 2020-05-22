@@ -1,10 +1,13 @@
-#include "commons.h"
-
 #define BOOST_SYSTEM_NO_DEPRECATED
 
 #include <boost/filesystem.hpp>
 
+#include "commons.h"
+
 namespace bf = boost::filesystem;
+
+using std::string;
+using std::vector;
 
 bool StartsWith(const string& text, const string& pattern) {
     if (text.size() < pattern.size()) {
