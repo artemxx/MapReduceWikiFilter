@@ -1,0 +1,4 @@
+process	
+vitamins	
+support	
+bad_word	
