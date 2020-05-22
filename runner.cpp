@@ -24,7 +24,7 @@ string GetFileName(const string& operation, const string& type, uint64_t file_nu
     return operation + "_" + type + "_" + GetNumber(file_num) + ".txt";
 }
 
-void PrintBatchToFile(vector <string>& urls, uint64_t file_num) {
+void PrintBatchToFile(vector<string>& urls, uint64_t file_num) {
     const auto file_name = GetFileName("map", "input", file_num);
     bf::create_directory(kMapFilesDir);
     std::ofstream out(kMapFilesDir + "/" + file_name);
@@ -65,7 +65,7 @@ void TMapReduceRunner::SplitDataOnFiles() const {
 void TMapReduceRunner::RunMap() const {
     const auto inputs = GetDirFilesStartsWith(kMapInputPattern, kMapFilesDir);
 
-    vector <bp::child> processes;
+    vector<bp::child> processes;
     processes.reserve(inputs.size());
     uint64_t file_num = 0;
     for (const auto& input : inputs) {
@@ -107,7 +107,7 @@ void TMapReduceRunner::MergeOutputs() const {
 
 void TMapReduceRunner::RunReduceJobs() const {
     const auto inputs = GetDirFilesStartsWith(kReduceInputPattern, kReduceFilesDir);
-    vector <bp::child> processes;
+    vector<bp::child> processes;
     processes.reserve(inputs.size());
     uint64_t file_num = 0;
     for (const auto& input : inputs) {
@@ -124,7 +124,7 @@ void TMapReduceRunner::RunReduceJobs() const {
 void TMapReduceRunner::SplitIntoJobs() {
     std::ifstream in(kReduceFilesDir + "/" + kSortedFileName);
     string text;
-    vector <pair<string, string>> cur;
+    vector<pair<string, string>> cur;
     uint64_t file_num = 0;
     while (getline(in, text)) {
         const auto word = text.substr(0, text.find('\t'));
@@ -140,7 +140,7 @@ void TMapReduceRunner::SplitIntoJobs() {
     GenerateReduceInput(cur, file_num);
 }
 
-void TMapReduceRunner::GenerateReduceInput(const vector <pair<string, string>>& data, uint64_t file_num) {
+void TMapReduceRunner::GenerateReduceInput(const vector<pair<string, string>>& data, uint64_t file_num) {
     const auto file_name = kReduceFilesDir + "/" + GetFileName("reduce", "input", file_num);
     std::ofstream out(file_name);
     for (const auto& it : data) {
